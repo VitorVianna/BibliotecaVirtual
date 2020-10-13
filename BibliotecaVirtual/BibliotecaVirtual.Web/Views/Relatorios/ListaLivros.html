@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Lista de Livros</title>
+
+    <link href="../../Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../Scripts/jquery-3.4.1.min.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="../../Scripts/Relatorios/ListaLivros.js"></script>
+</head>
+<body>
+
+    <div ng-app="myApp">
+        <table class="table table-striped">
+            <thead>
+                <tr class="label-default" style="color: white;">
+                    <th>
+                        Título
+                    </th>
+                    <th>
+                        Editora
+                    </th>
+                    <th>
+                        Edição
+                    </th>
+                    <th>
+                        Ano
+                    </th>
+                    <th>
+                        Valor
+                    </th>
+                    <th>
+                        Autor(es)
+                    </th>
+                    <th>
+                        Assunto(s)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in livros">
+                    <td>
+                        {{item.Titulo}}
+                    </td>
+                    <td>
+                        {{item.Editora}}
+                    </td>
+                    <td>
+                        {{item.Edicao}}
+                    </td>
+                    <td>
+                        {{item.AnoPublicacao}}
+                    </td>
+                    <td>
+                        {{item.Valor}}
+                    </td>
+                    <td>
+                        {{item.Autores}}
+                    </td>
+                    <td>
+                        {{item.Assuntos}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

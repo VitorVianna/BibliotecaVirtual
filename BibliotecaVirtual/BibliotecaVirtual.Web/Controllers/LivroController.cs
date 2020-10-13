@@ -50,15 +50,45 @@ namespace BibliotecaVirtual.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Titulo,Editora,Edicao,AnoPublicacao,Valor,ValorMin,ValorMax")] LivroModel livroModel)
+        public ActionResult Create([Bind(Include = "Id,Titulo,Editora,Edicao,AnoPublicacao,Valor,ValorMin,ValorMax,Autores,Assuntos")] ObjetoRetorno livro)
         {
             if (ModelState.IsValid)
             {
-                LivroService.CriarLivro(livroModel);
+                var NovoLivro = LivroService.CriarLivro(new LivroModel
+                {
+                    AnoPublicacao = livro.AnoPublicacao,
+                    Edicao = livro.Edicao,
+                    Editora = livro.Editora,
+                    Titulo = livro.Titulo,
+                    Valor = livro.Valor
+                });
+
+                if (!String.IsNullOrEmpty(livro.Autores))
+                {
+                    var listaAutores = livro.Autores.Split(',');
+
+                    foreach (var autor in listaAutores)
+                    {
+                        var novoAutor = AutorService.criarAutor(autor);
+                        LivroAutorService.VincularLivroAutor(NovoLivro, novoAutor);
+                    }
+                }
+
+                if (!String.IsNullOrEmpty(livro.Assuntos))
+                {
+                    var listaAssuntos = livro.Assuntos.Split(',');
+
+                    foreach (var assunto in listaAssuntos)
+                    {
+                        var novoAssunto = AssuntoService.criarAssunto(assunto);
+                        LivroAssuntoService.VincularLivroAssunto(NovoLivro, novoAssunto);
+                    }
+                }
+
                 return RedirectToAction("Index");
             }
 
-            return View(livroModel);
+            return View(livro);
         }
 
         // GET: Livro/Edit/5
@@ -89,6 +119,35 @@ namespace BibliotecaVirtual.Controllers
         {
             if (ModelState.IsValid)
             {
+                var livroAutorModel = new List<LivroAutorModel>();
+                var livroAssuntoModel = new List<LivroAssuntoModel>();
+
+                if (!String.IsNullOrEmpty(livro.Autores))
+                {
+                    var listaAutores = livro.Autores.Split(',');
+
+                    foreach (var autor in listaAutores)
+                    {
+                        livroAutorModel.Add(new LivroAutorModel
+                        {
+                            Autor = AutorService.criarAutor(autor)
+                        });
+                    }
+                }
+
+                if (!String.IsNullOrEmpty(livro.Assuntos))
+                {
+                    var listaAssuntos = livro.Assuntos.Split(',');
+
+                    foreach (var assunto in listaAssuntos)
+                    {
+                        livroAssuntoModel.Add(new LivroAssuntoModel
+                        {
+                            Assunto = AssuntoService.criarAssunto(assunto)
+                        });
+                    }
+                }
+
                 LivroService.EditarLivro(new LivroModel
                 {
                     AnoPublicacao = livro.AnoPublicacao,
@@ -96,8 +155,11 @@ namespace BibliotecaVirtual.Controllers
                     Editora = livro.Editora,
                     Id = livro.Id,
                     Titulo = livro.Titulo,
-                    Valor = livro.Valor
+                    Valor = livro.Valor,
+                    Autores = livroAutorModel,
+                    Assuntos = livroAssuntoModel
                 });
+
                 return RedirectToAction("Index");
             }
             return View(livro);

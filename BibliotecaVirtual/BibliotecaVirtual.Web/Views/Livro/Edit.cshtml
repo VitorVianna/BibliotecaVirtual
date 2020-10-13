@@ -3,7 +3,9 @@
 @{
     ViewBag.Title = "Edição";
 }
-
+<br />
+<br />
+<br />
 <h2>Edição</h2>
 
 
@@ -19,7 +21,7 @@
 
         <div class="form-group">
             <div class="col-md-2">Título </div>
-            <div class="col-md-10">
+            <div class="col-md-10 form-group has-success">
                 @Html.EditorFor(model => model.Titulo, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger" })
             </div>
@@ -27,7 +29,7 @@
 
         <div class="form-group">
             <div class="col-md-2">Editora</div>
-            <div class="col-md-10">
+            <div class="col-md-10 form-group has-success">
                 @Html.EditorFor(model => model.Editora, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Editora, "", new { @class = "text-danger" })
             </div>
@@ -35,7 +37,7 @@
 
         <div class="form-group">
             <div class="col-md-2">Edição</div>
-            <div class="col-md-10">
+            <div class="col-md-10 form-group has-success">
                 @Html.EditorFor(model => model.Edicao, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Edicao, "", new { @class = "text-danger" })
             </div>
@@ -43,7 +45,7 @@
 
         <div class="form-group">
             <div class="col-md-2">Ano de Publicação</div>
-            <div class="col-md-10">
+            <div class="col-md-10 form-group has-success">
                 @Html.EditorFor(model => model.AnoPublicacao, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.AnoPublicacao, "", new { @class = "text-danger" })
             </div>
@@ -51,21 +53,43 @@
 
         <div class="form-group">
             <div class="col-md-2">Valor</div>
-            <div class="col-md-10">
+            <div class="col-md-10 form-group has-success">
                 @Html.EditorFor(model => model.Valor, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
+            <div class="col-md-2">
+                Autores
+                <h6><i>Separados por vírgula (,)</i></h6>
+            </div>
+            <div class="col-md-10 form-group has-success">
+                @Html.EditorFor(model => model.Autores, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2">
+                Assuntos<br />
+                <i>Separados por vírgula (,)</i>
+            </div>
+            <div class="col-md-10 form-group has-success">
+                @Html.EditorFor(model => model.Assuntos, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-fill btn-success" />
             </div>
         </div>
     </div>
 }
 
-<div>
+<div class="btn btn-simple btn-info">
     @Html.ActionLink("Back to List", "Index")
 </div>
 

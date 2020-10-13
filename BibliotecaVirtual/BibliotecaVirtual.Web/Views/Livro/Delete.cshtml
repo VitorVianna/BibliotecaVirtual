@@ -1,18 +1,20 @@
-﻿@model BibliotecaVirtual.Web.Dados.Models.LivroModel
+﻿@model BibliotecaVirtual.Controllers.LivroController.ObjetoRetorno
 
 @{
     ViewBag.Title = "Delete";
 }
+<br />
+<br />
+<br />
+<h2>Exclusão</h2>
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>Tem certeza que deseja deletar este livro?</h3>
 <div>
-    <h4>LivroModel</h4>
+    <h4>Informações do Livro</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Titulo)
+            Título
         </dt>
 
         <dd>
@@ -20,7 +22,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Editora)
+            Editora
         </dt>
 
         <dd>
@@ -28,7 +30,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Edicao)
+            Edição
         </dt>
 
         <dd>
@@ -36,7 +38,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.AnoPublicacao)
+            Ano da Publicação
         </dt>
 
         <dd>
@@ -44,36 +46,20 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Valor)
+            Valor
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Valor)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ValorMin)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ValorMin)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ValorMax)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ValorMax)
-        </dd>
-
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Deletar" class="btn btn-danger" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

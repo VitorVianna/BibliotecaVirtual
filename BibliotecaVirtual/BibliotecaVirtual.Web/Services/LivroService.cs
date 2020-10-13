@@ -9,14 +9,18 @@ namespace BibliotecaVirtual.Web.Services
 {
     public class LivroService 
     {
-        public static void CriarLivro(LivroModel livro)
+        public static LivroModel CriarLivro(LivroModel livro)
         {
             try
             {
                 using (var db = new DataContext())
                 {
+                    if (db.Livros.Any(l => l.Titulo.ToUpper().Equals(livro.Titulo.ToUpper()) && l.Edicao == livro.Edicao))
+                        throw new Exception("O Livro já foi cadastrado.");
+
                     db.Livros.Add(livro);
                     db.SaveChanges();
+                    return livro;
                 }
             }
             catch (Exception ex)
@@ -25,15 +29,21 @@ namespace BibliotecaVirtual.Web.Services
             }
         }
 
-        public static string EditarLivro(LivroModel livroNovo)
+        public static LivroModel EditarLivro(LivroModel livroNovo)
         {
             try
             {
                 using (var db = new DataContext())
                 {
-                    var livro = db.Livros.FirstOrDefault(l => l.Id == livroNovo.Id);
+                    var livro = db.Livros
+                                .Include("Autores")
+                                .Include("Autores.Autor")
+                                .Include("Assuntos")
+                                .Include("Assuntos.Assunto").FirstOrDefault(l => l.Id == livroNovo.Id);
                     if (livro != null)
                     {
+                        LivroAutorService.DesvincularLivrosAutores(livro.Id);
+                        LivroAssuntoService.DesvincularLivrosAssuntos(livro.Id);
                         livro.AnoPublicacao = livroNovo.AnoPublicacao;
                         livro.Edicao = livroNovo.Edicao;
                         livro.Editora = livroNovo.Editora;
@@ -41,15 +51,22 @@ namespace BibliotecaVirtual.Web.Services
                         livro.Valor = livroNovo.Valor;
                         db.SaveChanges();
 
-                        return "Livro Alterado Com Sucesso!";
+                        foreach (var assunto in livroNovo.Assuntos) {
+                            LivroAssuntoService.VincularLivroAssunto(livro, assunto.Assunto);
+                        }
+                        foreach (var autor in livroNovo.Autores)
+                        {
+                            LivroAutorService.VincularLivroAutor(livro, autor.Autor);
+                        }
+                        return livro;
                     }
                     else
-                        return "Livro Não Encontrado.";
+                        throw new Exception("Livro Não Encontrado.");
                 }
             }
             catch (Exception ex)
             {
-                return "Erro Ao Gravar Livro! \nVerifique As Informações Inseridas \n" + ex.Message;
+                throw new Exception("Erro Ao Gravar Livro! \nVerifique As Informações Inseridas \n" + ex.Message);
             }
         }
 
@@ -62,6 +79,8 @@ namespace BibliotecaVirtual.Web.Services
                     var livroExcluido = db.Livros.FirstOrDefault(l => l.Id == idLivro);
                     if (livroExcluido != null)
                     {
+                        LivroAutorService.DesvincularLivrosAutores(livroExcluido.Id);
+                        LivroAssuntoService.DesvincularLivrosAssuntos(livroExcluido.Id);
                         db.Livros.Remove(livroExcluido);
                         db.SaveChanges();
 
@@ -73,7 +92,7 @@ namespace BibliotecaVirtual.Web.Services
             }
             catch (Exception ex)
             {
-                return "Erro Ao Excluir Livro! \nVerifique As Informações Inseridas \n" + ex.Message;
+                throw new Exception("Erro Ao Excluir Livro! \nVerifique As Informações Inseridas \n" + ex.Message);
             }
         }
 
